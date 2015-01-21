@@ -7,7 +7,7 @@
 R.Version()$major == '3' # should be True if not follow steps 1-3 here: http://reed.edu/data-at-reed/software/R/r_studio.html 
 
 # install, update and load packages -----------------------------------------------
-pkg <- c("devtools", "rvest", "stringr", "ggthemes",  "dplyr", "ggplot2",  "magrittr", "ggmap", "RColorBrewer", "htmlwidgets", "knitr", "magrittr", "RCurl")
+pkg <- c("devtools", "rvest", "stringr", "ggthemes",  "dplyr", "ggplot2",  "magrittr", "ggmap", "RColorBrewer", "htmlwidgets", "knitr", "magrittr", "RCurl", "scales")
 
 new.pkg <- pkg[!(pkg %in% installed.packages())]
 
@@ -15,7 +15,7 @@ if (length(new.pkg)) {
   install.packages(new.pkg)
 }
 
-update.packages(checkBuilt=TRUE, ask=FALSE)
+update.packages(checkBuilt=TRUE, ask=FALSE) # indicate that you would like to use a personal library ('y')
 
 library(knitr)
 library(devtools)
@@ -28,6 +28,7 @@ library(ggmap)
 library(RColorBrewer)
 library(magrittr)
 library(RCurl)
+library(scales)
 
 if (!require("rvest")) devtools::install_github("hadley/rvest")
 library(rvest)
@@ -91,9 +92,9 @@ wp_data <- cbind(wp_data, gc)
 
 # let's take a quick look at where all the colleges in the data are located
 leaflet(wp_data) %>% 
-    addTiles() %>% 
-    setView(-93.65, 42.0285, zoom = 3) %>%
-    addCircles(wp_data$lon, wp_data$lat) 
+  addTiles() %>% 
+  setView(-93.65, 42.0285, zoom = 3) %>%
+  addCircles(wp_data$lon, wp_data$lat) 
 
 
 # it might be helpful to color code the schools based on a variable in the data 
@@ -104,8 +105,8 @@ leaflet(wp_data) %>%
   addTiles() %>% 
   setView(-93.65, 42.0285, zoom = 3) %>%
   addCircles(wp_data$lon, wp_data$lat) %>%
-    addCircles(wp_data$lon, wp_data$lat, color = ~pal(ave_no_need_grant)) %>%
-    addCircleMarkers(wp_data$lon, wp_data$lat, color = ~pal(ave_no_need_grant)) # darker circles indicate higher values 
+  addCircles(wp_data$lon, wp_data$lat, color = ~pal(ave_no_need_grant)) %>%
+  addCircleMarkers(wp_data$lon, wp_data$lat, color = ~pal(ave_no_need_grant)) # darker circles indicate higher values 
 
 
 
@@ -126,7 +127,7 @@ wp_data %<>%
 
 
 # EXERCISE: create a region (NE) variable  -----------------------------------------------
-  # change the above code to create a binary variable that identifies the following states
+# change the above code to create a binary variable that identifies the following states
 state.list <- c('CT', 'DC', 'DE', 'MA', 'MD', 'ME', 'NH', 'NJ', 'NY', 'PA', 'RI', 'VT')
 
 
@@ -159,7 +160,7 @@ wp_data %<>%
 # we can also create a new data frame with just these variables while executing this code
 
 south.data <- 
-wp_data %>%                            # note change in operator 
+  wp_data %>%                            # note change in operator 
   arrange(desc(south), ave_no_need_grant) %>%
   select(south, ave_no_need_grant)
 
@@ -192,7 +193,7 @@ south.data %>%
 
 
 # EXERCISE: find the mean and standard deviation of ave_no_need_grant by region (Northeast)  -----------------------------------------------
-    # add min and max to your summary statistics
+# add min and max to your summary statistics
 
 
 
@@ -214,15 +215,20 @@ ggplot(south.data, aes(x=ave_no_need_grant, fill=as.factor(south))) +
   theme_classic() +
   facet_grid(south ~  sector)
 
-ggplot(wp_data, aes(x=ave_no_need_grant, fill=as.factor(south))) + 
-  geom_histogram() +
+ggplot(south.data, aes(x=ave_no_need_grant, fill=as.factor(south))) + 
+  geom_histogram(aes(y = ..density..)) +
   theme_classic() +
   facet_grid(south ~  sector)
 
+ggplot(south.data, aes(x=ave_no_need_grant, fill=as.factor(south))) + 
+  geom_histogram(aes(x = ave_no_need_grant, y = ..ncount..)) +
+  theme_classic() +
+  facet_grid(south ~  sector) +
+  scale_y_continuous(labels = percent_format())
 
 
 # EXERCISE: Replicate the above histograms of ave_no_need_grant using your northeast variable and data  -----------------------------------------------
-  # Bonus: change the colors of your histograms, change the theme of your graph, and/or add a title
+# Bonus: change the colors of your histograms, change the theme of your graph, and/or add a title
 
 
 
@@ -274,13 +280,4 @@ ggplot(choropleth, aes(long, lat, group = group)) +
 
 
 # EXERCISE: Replicate the above map using a different numeric variable  --------
-  # Bonus: change the color scheme, add a title, change the chart theme and/or make multiple maps
-
-
-
-
-
-
-
-
-
+# Bonus: change the color scheme, add a title, change the chart theme and/or make multiple maps
