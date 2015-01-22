@@ -5,6 +5,11 @@ date: "January 23, 2015"
 output: ioslides_presentation
 ---
 
+```{r, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
 ## What is Data Science?
 ![alt text](figures/data_science_1.png)
 
@@ -23,24 +28,133 @@ output: ioslides_presentation
 We focus on 3 (dplyr) and 5 (ggplot).
 
 
+## Data 
+At its simplest, data should be presented in a data matrix.  Consider a data set of diamonds and their properties, and convert it to a `tbl` data frame.  
+```{r}
+diamonds <- tbl_df(diamonds)
+diamonds
+```
+
+
 
 ## Essense of Data Manipulation
 
-Most data manipulations can be achieved by the following verbs:
+Most data manipulations can be achieved by the following verbs on a data matrix:
 
-1. filter: keep rows matching criteria
-2. summarise: reduce variables to values
-3. mutate: add new variables
-4. arrange: reorder rows
-5. select: pick columns by name
+1. `filter`: keep rows matching criteria
+2. `summarise`: reduce variables to values
+3. `mutate`: add new variables
+4. `arrange`: reorder rows
+5. `select`: pick columns by name
+
+Each of these is a command from the `dplyr` package.  Type `?select` to view them all.  
 
 ## Basic Commands
+For example, let's `filter` to only those diamonds are have "Ideal" cut
+```{r}
+filter(diamonds, cut == "Ideal")
+```
 
-* `%>%`: then
+## Basic Commands
+You can _pipe_ commands into others using the `%>%` command, described as _then_.
+```{r}
+filter(diamonds, cut == "Ideal") %>% select(carat)
+filter(diamonds, cut == "Ideal") %>% select(carat) %>% sum()
+```
+
+## Basic Commands
+You can _pipe_ commands into others using the `%>%` command, described as _then_.
+```{r}
+filter(diamonds, cut == "Ideal") %>% select(carat) %>% sum()
+```
+Note the piping saves you from nesting your commands in a morass of parentheses:
+```{r}
+sum(select(filter(diamonds, cut == "Ideal"), carat))
+```
+
+
 
 
 ## A Grammar of Graphics
 
-What is a graphic?
-ggplot philosophy
-layers
+_What is a statistical graphic?_  [Wilkinson (2005)](http://www.amazon.com/The-Grammar-Graphics-Statistics-Computing/dp/0387245448) boils it down to
+
+* `aes` aesthetic mappings of data to what we can perceive: color, size, and shape.  
+* `geom` geometric objects: points, lines, bars, etc.
+* `stat` statistical transformations to summarise data (smoothing lines, binning a histogram)
+* `facet` how to break up data into subsets and display
+* `scales` map values in data space to aesthetic space: drawing legends or axes
+* Extras
+
+
+## ggplot2 Package
+We use the `ggplot2` package instead of R's base graphics
+
+Strengths
+
+* Make beautiful graphics very fast.
+* Easy to update/modify plots.
+* Make highly customized plots very efficiently.
+
+Weaknesses
+
+* No 3d plotting or dynamic plots (see `ggvis`).
+* Can be difficult for unorthodox plots.
+* Slower processing time.
+
+
+## Building Plots by Layer
+```{r}
+library(ggplot2)
+head(diamonds)
+small <- diamonds[sample(nrow(diamonds), 1000), ]
+```
+`small` is a random sample of 1000 of the diamonds.  
+
+
+
+
+
+## Building Plots by Layer
+Question: What is the relationship between the carat of diamonds and their price, when you're comparing diamonds of the same cut quality?
+
+We build a plot layer by layer, where the layers are separated by `+` signs:
+
+```{r, cache=TRUE, eval=FALSE}
+ggplot(data=small, aes(x = carat, y = price, colour = cut)) + 
+  geom_point() + 
+  scale_y_log10() + 
+  facet_wrap(~cut) + 
+  ggtitle("First example")
+```
+
+
+## Building Plots by Layer
+```{r, cache=TRUE, echo=FALSE}
+ggplot(data=small, aes(x = carat, y = price, colour = cut)) + 
+  geom_point() + 
+  scale_y_log10() + 
+  facet_wrap(~cut) + 
+  ggtitle("First example")
+```
+
+## Building Plots by Layer
+
+1. Base of data + aesthetics: `ggplot(data=small, aes(x = carat, y = price, colour = cut))`
+2. type of `geom` is points:  `geom_point()`
+3. one facet per type of cut: `facet_wrap(~cut)`
+4. scale on y-axis is log base 10: `scale_y_log10()`
+5. more options: `ggtitle("First example")`
+
+## Finally
+There are many different types of `aes`, `geom`, `stat`, `scales` to consider:
+[http://docs.ggplot2.org/](http://docs.ggplot2.org/).  For example:
+
+* `geom_smooth`
+* `geom_histogram`
+* `geom_density`
+* `geom_boxplot`
+
+For more examples, see the [Data@Reed R tutorials page](http://reed.edu/data-at-reed/resources/).
+
+Thanks to Andrew Bray/Chris Ladroue for slide inspiration.
