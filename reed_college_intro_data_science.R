@@ -2,6 +2,8 @@
 ## Reed College 
 ## 1/23/2015
 
+# resources: http://reed.edu/data-at-reed/resources/
+
 # R version 3.0 or higher is required for this class ----------------------
 
 R.Version()$major == '3' # should be True if not follow steps 1-3 here: http://reed.edu/data-at-reed/software/R/r_studio.html 
@@ -187,9 +189,23 @@ south.data <-
 
 south.data %>%
   group_by(south) %>%
+  summarise(mean_merit = mean(ave_no_need_grant, na.rm = TRUE))
+
+south.data %>%
+  group_by(south) %>%
   summarise_each(funs(mean(.), sd(.)),                      
                  ave_no_need_grant) 
 
+wp_data %>%
+  group_by(south) %>%
+  summarise_each(funs(mean(.)),                      
+                 p_no_need_grant,  ave_no_need_grant,	p_need_grant) 
+
+
+wp_data %>%
+  group_by(south) %>%
+  summarise_each(funs(mean(.), sd(.)),                      
+                 p_no_need_grant,  ave_no_need_grant) 
 
 
 # EXERCISE: find the mean and standard deviation of ave_no_need_grant by region (Northeast)  -----------------------------------------------
