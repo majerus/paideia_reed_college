@@ -1,0 +1,46 @@
+---
+title: 'Data Science and Visualization'
+author: "Rich Majerus & Albert Y. Kim"
+date: "January 23, 2015"
+output: ioslides_presentation
+---
+
+## What is Data Science?
+![alt text](figures/data_science_1.png)
+
+## What is Data Science?
+![alt text](figures/data_science_2.png)
+
+
+## Steps to (Most) Analyses
+
+1. Formulate a scientific question
+2. Collect data
+3. Clean and manipulate data
+4. Analyze data
+5. Form conclusions & communicate them
+
+We focus on 3 (dplyr) and 5 (ggplot).
+
+
+
+## Essense of Data Manipulation
+
+Most data manipulations can be achieved by the following verbs:
+
+1. filter: keep rows matching criteria
+2. summarise: reduce variables to values
+3. mutate: add new variables
+4. arrange: reorder rows
+5. select: pick columns by name
+
+## Basic Commands
+
+* `%>%`: then
+
+
+## A Grammar of Graphics
+
+What is a graphic?
+ggplot philosophy
+layers
