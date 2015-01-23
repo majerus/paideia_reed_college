@@ -1,8 +1,10 @@
 ---
-title: 'Data Science and Visualization'
+title: "Data Science and Visualization"
 author: "Rich Majerus & Albert Y. Kim"
 date: "January 23, 2015"
-output: ioslides_presentation
+output:
+  ioslides_presentation:
+    smaller: yes
 ---
 
 ```{r, echo=FALSE, message=FALSE}
@@ -35,6 +37,10 @@ diamonds <- tbl_df(diamonds)
 diamonds
 ```
 
+## Today's Data
+Washington post [article](http://www.washingtonpost.com/local/education/colleges-often-give-discounts-to-the-rich-but-heres-one-that-gave-up-on-merit-aid/2014/12/29/a15a0f22-6f3c-11e4-893f-86bd390a3340_story.html) on college financial aid.
+
+Specifically the data in the table "College Grants for the Affluent".
 
 
 ## Essense of Data Manipulation
@@ -49,20 +55,20 @@ Most data manipulations can be achieved by the following verbs on a data matrix:
 
 Each of these is a command from the `dplyr` package.  Type `?select` to view them all.  
 
-## Basic Commands
+## dplyr Commands
 For example, let's `filter` to only those diamonds are have "Ideal" cut
 ```{r}
 filter(diamonds, cut == "Ideal")
 ```
 
-## Basic Commands
+## dplyr Commands
 You can _pipe_ commands into others using the `%>%` command, described as _then_.
 ```{r}
 filter(diamonds, cut == "Ideal") %>% select(carat)
 filter(diamonds, cut == "Ideal") %>% select(carat) %>% sum()
 ```
 
-## Basic Commands
+## dplyr Commands
 You can _pipe_ commands into others using the `%>%` command, described as _then_.
 ```{r}
 filter(diamonds, cut == "Ideal") %>% select(carat) %>% sum()
@@ -72,6 +78,16 @@ Note the piping saves you from nesting your commands in a morass of parentheses:
 sum(select(filter(diamonds, cut == "Ideal"), carat))
 ```
 
+## dplyr Commands
+Finally, you can use the `group_by()` command to define groupings on a categorical variable.  Compare:
+```{r}
+summarize(diamonds, mean(price))
+group_by(diamonds, cut) %>% summarize(mean(price))
+```
+
+
+## Exercise
+Steps 2 and 3 in `reed_college_intro_data_science.R` file.  
 
 
 
@@ -120,7 +136,7 @@ Question: What is the relationship between the carat of diamonds and their price
 
 We build a plot layer by layer, where the layers are separated by `+` signs:
 
-```{r, cache=TRUE, eval=FALSE}
+```{r, eval=FALSE}
 ggplot(data=small, aes(x = carat, y = price, colour = cut)) + 
   geom_point() + 
   scale_y_log10() + 
