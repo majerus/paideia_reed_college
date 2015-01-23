@@ -222,6 +222,18 @@ wp_data %>%
 
 # EXAMPLE: Create histograms of ave_no_need_grant (south)  -----------------------------------------------
 
+ggplot(south.data, aes(x=ave_no_need_grant)) +
+  geom_histogram() 
+
+ggplot(south.data, aes(x=ave_no_need_grant)) +
+  geom_histogram() +
+  theme_classic() 
+
+ggplot(south.data, aes(x=ave_no_need_grant)) +
+  geom_histogram() +
+  theme_classic() +
+  facet_wrap( ~  south, ncol=2)
+
 ggplot(south.data, aes(x=ave_no_need_grant, fill=as.factor(south))) +
   geom_histogram() +
   theme_classic() +
