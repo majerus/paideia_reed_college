@@ -13,10 +13,10 @@ library(dplyr)
 ```
 
 ## What is Data Science?
-![alt text](figures/data_science_1.png)
+![alt text](slides_files/data_science_1.png)
 
 ## What is Data Science?
-![alt text](figures/data_science_2.png)
+![alt text](slides_files/data_science_2.png)
 
 
 ## Steps to (Most) Analyses
