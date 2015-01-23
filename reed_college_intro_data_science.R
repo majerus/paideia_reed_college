@@ -20,6 +20,13 @@ if (length(new.pkg)) {
 
 update.packages(checkBuilt=TRUE, ask=FALSE) # indicate that you would like to use a personal library ('y')
 
+
+if (!require("rvest")) devtools::install_github("hadley/rvest")
+library(rvest)
+
+if (!require("leaflet")) devtools::install_github("rstudio/leaflet")
+library(leaflet)
+
 library(knitr)
 library(devtools)
 library(htmlwidgets)
@@ -32,13 +39,6 @@ library(RColorBrewer)
 library(magrittr)
 library(RCurl)
 library(scales)
-
-if (!require("rvest")) devtools::install_github("hadley/rvest")
-library(rvest)
-
-if (!require("leaflet")) devtools::install_github("rstudio/leaflet")
-library(leaflet)
-
 
 # scrape data from Washington Post into a data frame -------------------------------------------
 webpage <- html("http://apps.washingtonpost.com/g/page/local/college-grants-for-the-affluent/1526/")
