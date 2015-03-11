@@ -61,7 +61,7 @@ ggplot(
   aes(Year, Matriculants, group = State, colour = State)) + 
   geom_line(size=2) +
   facet_wrap( ~  State, 
-              ncol=nrow(subset(data_long, data_long$State %in% keep))/16) 
+              ncol=2 
 
 # plot selected states (facets) with title, theme and different colors
 ggplot(
@@ -75,3 +75,13 @@ ggplot(
   theme(plot.title = element_text(size = 16, face="bold")) + 
   scale_colour_brewer("Colors in Set1", palette="Set1")
 
+# graph all states
+ggplot(
+  data_long,
+  aes(Year, Matriculants, group = State, colour = State)) + 
+  geom_line(size=2) +
+  facet_wrap( ~  State, 
+              ncol = 10) +
+  ggtitle("Reed College Matriculants by State") +
+  theme_tufte() +
+  theme(plot.title = element_text(size = 16, face="bold")) 
